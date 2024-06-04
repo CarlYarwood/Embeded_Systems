@@ -1,0 +1,13 @@
+#include <avr/io.h>
+#include "lcd.h"
+#include "delay.h"
+
+void main(){
+  DDRB |= 1<<5;
+    PORTB |= 1<<5;
+    lcdInit();
+    lcdPuts("Hello, World!");
+    PORTB &= ~(1<<5);
+    delay1ms(1000);
+    while(1){}
+}

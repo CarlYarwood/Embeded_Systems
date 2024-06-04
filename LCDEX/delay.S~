@@ -1,0 +1,52 @@
+	.macro nop2			;
+	rjmp .				;
+	.endm				;
+
+	.text
+	.global delay1us
+	.global delay1ms
+
+delay1us:
+	nop
+	nop
+	nop
+	rjmp delay2
+delay1:
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+delay2:
+	sbiw r24, 1
+	brne delay1
+	ret
+
+delay1ms:
+	movw r26, r24
+	rjmp delay4
+delay3:
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+delay4:
+	ldi r24, 231
+	ldi r25, 3
+	call delay1us
+	sbiw r26, 1
+	brne delay3
+	ret

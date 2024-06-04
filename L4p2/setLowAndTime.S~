@@ -1,0 +1,30 @@
+	#define __SFR_OFFSET 0
+	#include <avr/io.h>
+
+	.text
+	.global setLowAndTime	; uint32_t setLowAndTime()
+setLowAndTime:
+	clr r22			;initialize r22:r25 to zero
+	clr r23			;we'll use them to cout microseconds
+	clr r24
+	clr r25
+	ldi r20, 1		;for increment with carry
+
+	cbi PORTB, PB1		;set PB1 low
+loop1:
+	in r21, PINB		;1 cycle
+	andi r21, (1<<PB0)	;see fi PB0 is low 1 cycle
+	breq done1		;break if it is false -> 1 cycle, true -> 2
+	add r22, r20		;add on to the count 1 Cycle
+	adc r23, r1		;and carry 1 cycle
+	adc r24, r1		;and carry 1 cycle
+	adc r25, r1		;and cary into MSB 1 cycle
+	nop			;delay 1 cycle
+	rjmp .			;delay 2 cycles
+	rjmp .			;delay 2 cycles
+	rjmp .			;delay 2 cycles
+	rjmp loop1		;2 cycles total 16 cycles
+done1:
+	sbi PORTB, PB1		;setPB1 hich again
+	ret
+	
